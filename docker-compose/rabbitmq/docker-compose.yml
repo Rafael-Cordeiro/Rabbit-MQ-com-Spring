@@ -1,0 +1,14 @@
+version: '2'
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        container_name: 'rabbitmq'
+        ports:
+            - 5672:5672
+            - 15672:15672
+        volumes:
+            - '/home/rafael/docker/rabbitmq/data:/var/lib/rabbitmq'
+            - '/home/rafael/docker/rabbitmq/log:/var/log/rabbitmq'
+        environment:
+            - RABBITMQ_DEFAULT_USER=admin
+            - RABBITMQ_DEFAULT_PASS=admin
