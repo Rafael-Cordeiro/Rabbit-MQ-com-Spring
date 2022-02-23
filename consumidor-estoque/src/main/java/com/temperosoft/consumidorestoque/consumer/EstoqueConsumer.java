@@ -13,21 +13,13 @@ import dto.EstoqueDTO;
 @Component
 public class EstoqueConsumer {
 	
-	ObjectMapper objectMapper = new ObjectMapper();
-	
-	@RabbitListener(queues=RabbitMQConsts.QUEUE_ESTOQUE)
-	private void consume(String message) {
-		EstoqueDTO estoqueDTO;
-		try {
-			estoqueDTO = objectMapper.readValue(message, EstoqueDTO.class);
-			System.out.println(estoqueDTO.codigoProduto);
-			System.out.println(estoqueDTO.quantidade);
-			System.out.println("Payload: " + message);
-			System.out.println("-----------------------------");
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
+	@RabbitListener(queues=RabbitMQConsts.QUEUE_ESTOQUE, containerFactory="rabbitListenerContainerFactory")
+	private void consume(String message) throws InterruptedException, JsonMappingException, JsonProcessingException {
+		EstoqueDTO estoqueDTO = new ObjectMapper().readValue(message, EstoqueDTO.class);
+		System.out.println(estoqueDTO.codigoProduto);
+		System.out.println(estoqueDTO.quantidade);
+		System.out.println("Payload: " + message);
+		System.out.println("-----------------------------");
+		Thread.sleep(5000);
 	}
 }
